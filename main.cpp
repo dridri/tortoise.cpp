@@ -6530,12 +6530,14 @@ int main(int argc, char **argv) {
   std::string defaultMessage = "this is a test message.";
   std::string defaultVoicePath = "../models/mol.bin";
   std::string defaultOutputPath = "./output.wav";
+  bool defaultTimeResult = false;
   std::string message = defaultMessage;
   std::string voicePath = defaultVoicePath;
   std::string outputPath = defaultOutputPath;
+  bool timeResult = defaultTimeResult;
 
   // Parse command line arguments
-  for (int i = 1; i < argc - 1; ++i) {
+  for (int i = 1; i < argc; ++i) {
     if (std::string(argv[i]) == "--voice") {
       voicePath = argv[i + 1];
     } else if (std::string(argv[i]) == "--message") {
@@ -6544,17 +6546,21 @@ int main(int argc, char **argv) {
       outputPath = argv[i + 1];
     } else if (std::string(argv[i]) == "--seed") {
       generator.seed(std::stoi(argv[i + 1]));
+    } else if (std::string(argv[i]) == "--time") {
+      timeResult = true;
     }
   }
 
   gpt_vocab vocab;
   gpt_vocab_init("../models/tokenizer.json", vocab);
 
-  // test_autoregressive();
-  // test_diffusion();
-  // test_vocoder();
-  // std::cout <<"all tests succeeded!" << std::endl;
-  // exit(0);
+  //test_autoregressive();
+  //test_diffusion();
+  //test_vocoder();
+  //std::cout << "all tests succeeded!" << std::endl;
+  //exit(0);
+
+  auto start = std::chrono::high_resolution_clock::now();
 
   replaceAll(message, " ", "[SPACE]");
 
@@ -6576,7 +6582,16 @@ int main(int argc, char **argv) {
 
   std::vector<float> audio = vocoder(mel);
 
+  auto end = std::chrono::high_resolution_clock::now();
+  auto duration_ms =
+      std::chrono::duration_cast<std::chrono::milliseconds>(end - start)
+          .count();
+
   // save_f32_vector("./target_audio.bin", audio);
+
+  if (timeResult) {
+    std::cout << "Time taken: " << duration_ms << " milliseconds" << std::endl;
+  }
 
   writeWav(outputPath.c_str(), audio, 24000);
 
