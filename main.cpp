@@ -3151,11 +3151,9 @@ struct ggml_cgraph *diffusion_graph(struct diffusion_model &model,
         ctx0, model.diffusion_conditioning_latent, 1024,
         ggml_element_size(model.diffusion_conditioning_latent) * 1024);
 
-
     cur = ggml_cont(
         ctx0, ggml_conv_1d(ctx0, model.latent_conditioner_convolution_weight,
                            cur, 1, 1, 1));
-
 
     cur = ggml_cont(
         ctx0,
@@ -3193,11 +3191,18 @@ struct ggml_cgraph *diffusion_graph(struct diffusion_model &model,
 
       // qkv
 
-      cur = ggml_cont(ctx0,
-                      ggml_conv_1d(ctx0, ggml_reshape_3d(ctx0, model.latent_conditioner_attention_blocks[i].qkv_weight,1,1024,3072), cur, 1, 0, 1));
+      cur = ggml_cont(
+          ctx0,
+          ggml_conv_1d(
+              ctx0,
+              ggml_reshape_3d(
+                  ctx0, model.latent_conditioner_attention_blocks[i].qkv_weight,
+                  1, 1024, 3072),
+              cur, 1, 0, 1));
 
-      //cur =
-      //    ggml_cpy(ctx0, cur, ggml_new_tensor(ctx0, GGML_TYPE_F32, 4, cur->ne));
+      // cur =
+      //     ggml_cpy(ctx0, cur, ggml_new_tensor(ctx0, GGML_TYPE_F32, 4,
+      //     cur->ne));
 
       cur = ggml_cont(
           ctx0,
@@ -3354,7 +3359,15 @@ struct ggml_cgraph *diffusion_graph(struct diffusion_model &model,
       cur = ggml_silu(ctx0, cur);
 
       cur = ggml_cont(
-          ctx0, ggml_conv_1d(ctx0, ggml_reshape_3d(ctx0, model.timestep_conditioning_integrator_diffusion_layers[c].resblock_in_layers_2_weight, 1, 1024, 1024), cur, 1, 0, 1));
+          ctx0,
+          ggml_conv_1d(
+              ctx0,
+              ggml_reshape_3d(
+                  ctx0,
+                  model.timestep_conditioning_integrator_diffusion_layers[c]
+                      .resblock_in_layers_2_weight,
+                  1, 1024, 1024),
+              cur, 1, 0, 1));
 
       cur = ggml_cont(
           ctx0,
@@ -3416,9 +3429,15 @@ struct ggml_cgraph *diffusion_graph(struct diffusion_model &model,
       cur = ggml_silu(ctx0, cur);
 
       cur = ggml_cont(
-          ctx0, ggml_conv_1d(ctx0, ggml_reshape_3d(ctx0, model.timestep_conditioning_integrator_diffusion_layers[c]
-              .resblock_out_layers_3_weight,3,1024,1024), cur, 1, 1, 1));
-
+          ctx0,
+          ggml_conv_1d(
+              ctx0,
+              ggml_reshape_3d(
+                  ctx0,
+                  model.timestep_conditioning_integrator_diffusion_layers[c]
+                      .resblock_out_layers_3_weight,
+                  3, 1024, 1024),
+              cur, 1, 1, 1));
 
       cur = ggml_cont(
           ctx0,
@@ -3465,10 +3484,16 @@ struct ggml_cgraph *diffusion_graph(struct diffusion_model &model,
 
       // qkv
 
-      cur = ggml_cont(ctx0,
-                      ggml_conv_1d(ctx0, ggml_reshape_3d(ctx0, model.timestep_conditioning_integrator_diffusion_layers[c]
-                      .attn_qkv_weight, 1, 1024, 3072), cur, 1, 0, 1));
-
+      cur = ggml_cont(
+          ctx0,
+          ggml_conv_1d(
+              ctx0,
+              ggml_reshape_3d(
+                  ctx0,
+                  model.timestep_conditioning_integrator_diffusion_layers[c]
+                      .attn_qkv_weight,
+                  1, 1024, 3072),
+              cur, 1, 0, 1));
 
       cur = ggml_cont(
           ctx0,
@@ -3549,23 +3574,25 @@ struct ggml_cgraph *diffusion_graph(struct diffusion_model &model,
 
   cur = ggml_cpy(ctx0, cur, ggml_new_tensor(ctx0, GGML_TYPE_F32, 4, cur->ne));
 
-
-  cur = ggml_cont(ctx0,
-                  ggml_conv_1d(ctx0, ggml_reshape_3d(ctx0, model.inp_block_weight, 3, 100, 1024), cur, 1, 1, 1));
-
+  cur = ggml_cont(
+      ctx0,
+      ggml_conv_1d(ctx0,
+                   ggml_reshape_3d(ctx0, model.inp_block_weight, 3, 100, 1024),
+                   cur, 1, 1, 1));
 
   cur = ggml_cont(
       ctx0, ggml_transpose(
                 ctx0, ggml_add(ctx0, ggml_cont(ctx0, ggml_transpose(ctx0, cur)),
                                model.inp_block_bias)));
 
-
   cur = ggml_reshape_2d(ctx0, ggml_concat(ctx0, cur, code_embedding, 2),
                         output_sequence_length, 2048);
 
-  cur = ggml_cont(ctx0,
-                  ggml_conv_1d(ctx0, ggml_reshape_3d(ctx0, model.integrating_conv_weight, 1, 2048, 1024), cur, 1, 0, 1));
-
+  cur = ggml_cont(
+      ctx0, ggml_conv_1d(ctx0,
+                         ggml_reshape_3d(ctx0, model.integrating_conv_weight, 1,
+                                         2048, 1024),
+                         cur, 1, 0, 1));
 
   cur = ggml_cont(
       ctx0, ggml_transpose(
@@ -3604,8 +3631,12 @@ struct ggml_cgraph *diffusion_graph(struct diffusion_model &model,
       cur = ggml_silu(ctx0, cur);
 
       cur = ggml_cont(
-          ctx0, ggml_conv_1d(ctx0, ggml_reshape_3d(ctx0, model.main_diffusion_layers[c].resblock_in_layers_2_weight, 1, 1024, 1024), cur, 1, 0, 1));
-
+          ctx0, ggml_conv_1d(ctx0,
+                             ggml_reshape_3d(ctx0,
+                                             model.main_diffusion_layers[c]
+                                                 .resblock_in_layers_2_weight,
+                                             1, 1024, 1024),
+                             cur, 1, 0, 1));
 
       cur = ggml_cont(
           ctx0,
@@ -3665,7 +3696,12 @@ struct ggml_cgraph *diffusion_graph(struct diffusion_model &model,
       cur = ggml_silu(ctx0, cur);
 
       cur = ggml_cont(
-          ctx0, ggml_conv_1d(ctx0, ggml_reshape_3d(ctx0,model.main_diffusion_layers[c].resblock_out_layers_3_weight, 3, 1024, 1024 ), cur, 1, 1, 1));
+          ctx0, ggml_conv_1d(ctx0,
+                             ggml_reshape_3d(ctx0,
+                                             model.main_diffusion_layers[c]
+                                                 .resblock_out_layers_3_weight,
+                                             3, 1024, 1024),
+                             cur, 1, 1, 1));
 
       cur = ggml_cont(
           ctx0,
@@ -3707,10 +3743,13 @@ struct ggml_cgraph *diffusion_graph(struct diffusion_model &model,
 
       // qkv
 
-
-      cur = ggml_cont(ctx0,
-                      ggml_conv_1d(ctx0, ggml_reshape_3d(ctx0, model.main_diffusion_layers[c].attn_qkv_weight, 1, 1024, 3072), cur, 1, 0, 1));
-
+      cur = ggml_cont(
+          ctx0,
+          ggml_conv_1d(ctx0,
+                       ggml_reshape_3d(
+                           ctx0, model.main_diffusion_layers[c].attn_qkv_weight,
+                           1, 1024, 3072),
+                       cur, 1, 0, 1));
 
       cur = ggml_cont(
           ctx0,
@@ -3804,16 +3843,19 @@ struct ggml_cgraph *diffusion_graph(struct diffusion_model &model,
 
     cur = ggml_silu(ctx0, cur);
 
-    cur = ggml_cont(ctx0,
-                    ggml_conv_1d(ctx0, ggml_reshape_3d(ctx0, model.main_residual_blocks[c].in_layers_2_weight, 1, 1024, 1024), cur, 1, 0, 1));
-
+    cur = ggml_cont(
+        ctx0,
+        ggml_conv_1d(ctx0,
+                     ggml_reshape_3d(
+                         ctx0, model.main_residual_blocks[c].in_layers_2_weight,
+                         1, 1024, 1024),
+                     cur, 1, 0, 1));
 
     cur = ggml_cont(
         ctx0,
         ggml_transpose(
             ctx0, ggml_add(ctx0, ggml_cont(ctx0, ggml_transpose(ctx0, cur)),
                            model.main_residual_blocks[c].in_layers_2_bias)));
-
 
     // emb_layers
 
@@ -3857,9 +3899,13 @@ struct ggml_cgraph *diffusion_graph(struct diffusion_model &model,
 
     cur = ggml_silu(ctx0, cur);
 
-    cur = ggml_cont(ctx0,
-                    ggml_conv_1d(ctx0, ggml_reshape_3d(ctx0,model.main_residual_blocks[c].out_layers_3_weight, 3, 1024, 1024 ), cur, 1, 1, 1));
-
+    cur = ggml_cont(
+        ctx0, ggml_conv_1d(
+                  ctx0,
+                  ggml_reshape_3d(
+                      ctx0, model.main_residual_blocks[c].out_layers_3_weight,
+                      3, 1024, 1024),
+                  cur, 1, 1, 1));
 
     cur = ggml_cont(
         ctx0,
@@ -3890,15 +3936,16 @@ struct ggml_cgraph *diffusion_graph(struct diffusion_model &model,
 
   cur = ggml_silu(ctx0, cur);
 
-  cur = ggml_cont(ctx0,
-                  ggml_conv_1d(ctx0, ggml_reshape_3d(ctx0, model.out_convolution_weight, 3, 1024, 200), cur, 1, 1, 1));
-
+  cur = ggml_cont(
+      ctx0, ggml_conv_1d(ctx0,
+                         ggml_reshape_3d(ctx0, model.out_convolution_weight, 3,
+                                         1024, 200),
+                         cur, 1, 1, 1));
 
   cur = ggml_cont(
       ctx0, ggml_transpose(
                 ctx0, ggml_add(ctx0, ggml_cont(ctx0, ggml_transpose(ctx0, cur)),
                                model.out_convolution_bias)));
-
 
   ggml_set_name(cur, "output");
 
@@ -3979,15 +4026,13 @@ struct ggml_cgraph *vocoder_graph(struct vocoder_model &model,
 
   ggml_tensor *cur = ggml_pad_reflect_1d(ctx0, vocoder_noise, 3, 3);
 
-  cur = ggml_cont(ctx0,
-                  ggml_conv_1d(ctx0, model.convolution_pre_weight, cur, 1, 0, 1));
-
+  cur = ggml_cont(
+      ctx0, ggml_conv_1d(ctx0, model.convolution_pre_weight, cur, 1, 0, 1));
 
   cur = ggml_cont(
       ctx0, ggml_transpose(
                 ctx0, ggml_add(ctx0, ggml_cont(ctx0, ggml_transpose(ctx0, cur)),
                                model.convolution_pre_bias)));
-
 
   int strides[] = {8, 8, 4};
   int paddings[] = {4, 4, 2};
@@ -4030,9 +4075,12 @@ struct ggml_cgraph *vocoder_graph(struct vocoder_model &model,
         ggml_cpy(ctx0, padded_mel,
                  ggml_new_tensor(ctx0, GGML_TYPE_F32, 4, padded_mel->ne));
 
-    conditioning = ggml_cont(ctx0, ggml_conv_1d(ctx0, model.residual_stack[i].kernel_predictor_input_convolution_weight,
-                                                conditioning, 1, 2, 1));
-
+    conditioning = ggml_cont(
+        ctx0,
+        ggml_conv_1d(
+            ctx0,
+            model.residual_stack[i].kernel_predictor_input_convolution_weight,
+            conditioning, 1, 2, 1));
 
     conditioning = ggml_cont(
         ctx0,
@@ -4042,7 +4090,6 @@ struct ggml_cgraph *vocoder_graph(struct vocoder_model &model,
                      model.residual_stack[i]
                          .kernel_predictor_input_convolution_bias)));
 
-
     conditioning =
         ggml_cont(ctx0, ggml_leaky_relu(ctx0, conditioning, 0.2, false));
 
@@ -4050,12 +4097,12 @@ struct ggml_cgraph *vocoder_graph(struct vocoder_model &model,
 
     for (int c = 0; c < 3; c++) {
 
-      conditioning_offset =
-          ggml_cont(ctx0, ggml_conv_1d(ctx0, model.residual_stack[i]
-                       .kernel_predictor_residual_conv_blocks[c]
-                       .residual_convs_1_weight,
-                                       conditioning, 1, 1, 1));
-
+      conditioning_offset = ggml_cont(
+          ctx0, ggml_conv_1d(ctx0,
+                             model.residual_stack[i]
+                                 .kernel_predictor_residual_conv_blocks[c]
+                                 .residual_convs_1_weight,
+                             conditioning, 1, 1, 1));
 
       conditioning_offset = ggml_cont(
           ctx0,
@@ -4067,17 +4114,15 @@ struct ggml_cgraph *vocoder_graph(struct vocoder_model &model,
                                  .kernel_predictor_residual_conv_blocks[c]
                                  .residual_convs_1_bias)));
 
-
       conditioning_offset = ggml_cont(
           ctx0, ggml_leaky_relu(ctx0, conditioning_offset, 0.2, false));
 
-
-      conditioning_offset =
-          ggml_cont(ctx0, ggml_conv_1d(ctx0, model.residual_stack[i]
-                       .kernel_predictor_residual_conv_blocks[c]
-                       .residual_convs_3_weight,
-                                       conditioning_offset, 1, 1, 1));
-
+      conditioning_offset = ggml_cont(
+          ctx0, ggml_conv_1d(ctx0,
+                             model.residual_stack[i]
+                                 .kernel_predictor_residual_conv_blocks[c]
+                                 .residual_convs_3_weight,
+                             conditioning_offset, 1, 1, 1));
 
       conditioning_offset = ggml_cont(
           ctx0,
@@ -4095,11 +4140,12 @@ struct ggml_cgraph *vocoder_graph(struct vocoder_model &model,
       conditioning = ggml_add(ctx0, conditioning, conditioning_offset);
     }
 
-
-    struct ggml_tensor *kernels =
-        ggml_cont(ctx0, ggml_conv_1d(ctx0, model.residual_stack[i].kernel_predictor_kernel_convolution_weight,
-                                     conditioning, 1, 1, 1));
-
+    struct ggml_tensor *kernels = ggml_cont(
+        ctx0,
+        ggml_conv_1d(
+            ctx0,
+            model.residual_stack[i].kernel_predictor_kernel_convolution_weight,
+            conditioning, 1, 1, 1));
 
     kernels = ggml_cont(
         ctx0,
@@ -4108,11 +4154,12 @@ struct ggml_cgraph *vocoder_graph(struct vocoder_model &model,
                            model.residual_stack[i]
                                .kernel_predictor_kernel_convolution_bias)));
 
-
-    struct ggml_tensor *bias =
-        ggml_cont(ctx0, ggml_conv_1d(ctx0, model.residual_stack[i].kernel_predictor_bias_convolution_weight,
-                                     conditioning, 1, 1, 1));
-
+    struct ggml_tensor *bias = ggml_cont(
+        ctx0,
+        ggml_conv_1d(
+            ctx0,
+            model.residual_stack[i].kernel_predictor_bias_convolution_weight,
+            conditioning, 1, 1, 1));
 
     bias = ggml_cont(
         ctx0,
@@ -4120,7 +4167,6 @@ struct ggml_cgraph *vocoder_graph(struct vocoder_model &model,
             ctx0, ggml_add(ctx0, ggml_cont(ctx0, ggml_transpose(ctx0, bias)),
                            model.residual_stack[i]
                                .kernel_predictor_bias_convolution_bias)));
-
 
     kernels = ggml_reshape_3d(ctx0, kernels, kernels->ne[0], 6144, 4);
     bias = ggml_reshape_3d(ctx0, bias, bias->ne[0], 64, 4);
@@ -4140,11 +4186,11 @@ struct ggml_cgraph *vocoder_graph(struct vocoder_model &model,
 
       output = ggml_leaky_relu(ctx0, cur, 0.2, false);
 
-
-      output = ggml_cont(ctx0, ggml_conv_1d(ctx0, model.residual_stack[i].conv_blocks[c].conv_block_1_weight,
-                                            output, 1, conv_block_paddings[c],
-                                            conv_block_dilations[c]));
-
+      output = ggml_cont(
+          ctx0,
+          ggml_conv_1d(
+              ctx0, model.residual_stack[i].conv_blocks[c].conv_block_1_weight,
+              output, 1, conv_block_paddings[c], conv_block_dilations[c]));
 
       output = ggml_cont(
           ctx0,
@@ -4253,8 +4299,8 @@ struct ggml_cgraph *vocoder_graph(struct vocoder_model &model,
 
   cur = ggml_leaky_relu(ctx0, cur, 0.2, false);
 
-  cur = ggml_cont(ctx0,
-                  ggml_conv_1d(ctx0, model.convolution_post_weight, cur, 1, 0, 1));
+  cur = ggml_cont(
+      ctx0, ggml_conv_1d(ctx0, model.convolution_post_weight, cur, 1, 0, 1));
 
   cur = ggml_cpy(ctx0, cur, ggml_new_tensor(ctx0, GGML_TYPE_F32, 4, cur->ne));
 
@@ -6345,11 +6391,11 @@ int main(int argc, char **argv) {
   gpt_vocab vocab;
   gpt_vocab_init("../models/tokenizer.json", vocab);
 
-  test_autoregressive();
-  test_diffusion();
-  test_vocoder();
-  std::cout << "all tests succeeded!" << std::endl;
-  exit(0);
+  //test_autoregressive();
+  //test_diffusion();
+  //test_vocoder();
+  //std::cout << "all tests succeeded!" << std::endl;
+  //exit(0);
 
   auto start = std::chrono::high_resolution_clock::now();
 
