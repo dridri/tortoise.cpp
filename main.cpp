@@ -6391,11 +6391,11 @@ int main(int argc, char **argv) {
   gpt_vocab vocab;
   gpt_vocab_init("../models/tokenizer.json", vocab);
 
-  //test_autoregressive();
-  //test_diffusion();
-  //test_vocoder();
-  //std::cout << "all tests succeeded!" << std::endl;
-  //exit(0);
+  // test_autoregressive();
+  // test_diffusion();
+  // test_vocoder();
+  // std::cout << "all tests succeeded!" << std::endl;
+  // exit(0);
 
   auto start = std::chrono::high_resolution_clock::now();
 
@@ -6431,6 +6431,9 @@ int main(int argc, char **argv) {
   }
 
   writeWav(outputPath.c_str(), audio, 24000);
+  std::cout << std::endl << std::endl;
+  std::cout << "Please consider donating :^)" << std::endl
+            << "https://ko-fi.com/johnbalis" << std::endl;
 
   return 0;
 }

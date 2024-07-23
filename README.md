@@ -1,4 +1,4 @@
-# tortoise.cpp: GGML implementation of tortoise-tts (Ready for testing!)
+# tortoise.cpp: GGML implementation of tortoise-tts ([Support Development Here!](https://ko-fi.com/johnbalis))
 
 ![a menacing sea turtle in the ocean; mascot for tortoise.cpp](https://github.com/balisujohn/tortoise.cpp/blob/master/assets/tortoiselogo.png?raw=true)
 
