@@ -10,7 +10,7 @@ git clone --recursive https://github.com/balisujohn/tortoise.cpp.git
 # Compiling
 For now, CUDA and CPU only. To compile:
 
-## Compile for CPU
+## Compile for CPU (works on Linux x86 and Mac ARM)
 ````
 mkdir build
 cd build
