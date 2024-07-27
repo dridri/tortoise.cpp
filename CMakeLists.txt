@@ -14,6 +14,11 @@ if (GGML_CUBLAS)
     add_definitions(-DGGML_USE_CUBLAS)
 endif()
 
+if (GGML_METAL)
+    add_definitions(-DGGML_USE_METAL)
+    set(GGML_METAL_EMBED_LIBRARY ON CACHE BOOL "Embed Metal library")
+endif()
+
 add_subdirectory(ggml)
 
 target_link_libraries(tortoise PUBLIC ggml)

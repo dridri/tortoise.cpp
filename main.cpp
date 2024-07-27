@@ -656,7 +656,7 @@ bool autoregressive_model_load(const std::string &fname,
 
 #ifdef GGML_USE_METAL
   fprintf(stderr, "%s: using Metal backend\n", __func__);
-  ggml_metal_log_set_callback(ggml_log_callback_default, nullptr);
+  // ggml_metal_log_set_callback(ggml_log_callback_default, nullptr);
   model.backend = ggml_backend_metal_init();
   if (!model.backend) {
     fprintf(stderr, "%s: ggml_backend_metal_init() failed\n", __func__);
@@ -822,7 +822,7 @@ bool autoregressive_model_load(const std::string &fname,
       }
 
       int32_t nelements = 1;
-      int32_t ne[2] = {1, 1};
+      int32_t ne[4] = {1, 1, 1, 1};
       for (int i = 0; i < n_dims; ++i) {
         fin.read(reinterpret_cast<char *>(&ne[i]), sizeof(ne[i]));
         nelements *= ne[i];
@@ -1218,7 +1218,7 @@ bool diffusion_model_load(const std::string &fname, diffusion_model &model) {
 
 #ifdef GGML_USE_METAL
   fprintf(stderr, "%s: using Metal backend\n", __func__);
-  ggml_metal_log_set_callback(ggml_log_callback_default, nullptr);
+  // ggml_metal_log_set_callback(ggml_log_callback_default, nullptr);
   model.backend = ggml_backend_metal_init();
   if (!model.backend) {
     fprintf(stderr, "%s: ggml_backend_metal_init() failed\n", __func__);
@@ -1559,7 +1559,7 @@ bool diffusion_model_load(const std::string &fname, diffusion_model &model) {
       }
 
       int32_t nelements = 1;
-      int32_t ne[2] = {1, 1};
+      int32_t ne[4] = {1, 1, 1, 1};
       for (int i = 0; i < n_dims; ++i) {
         fin.read(reinterpret_cast<char *>(&ne[i]), sizeof(ne[i]));
         nelements *= ne[i];
@@ -1782,7 +1782,7 @@ bool vocoder_model_load(const std::string &fname, vocoder_model &model) {
 
 #ifdef GGML_USE_METAL
   fprintf(stderr, "%s: using Metal backend\n", __func__);
-  ggml_metal_log_set_callback(ggml_log_callback_default, nullptr);
+  // ggml_metal_log_set_callback(ggml_log_callback_default, nullptr);
   model.backend = ggml_backend_metal_init();
   if (!model.backend) {
     fprintf(stderr, "%s: ggml_backend_metal_init() failed\n", __func__);
@@ -1946,7 +1946,7 @@ bool vocoder_model_load(const std::string &fname, vocoder_model &model) {
       }
 
       int32_t nelements = 1;
-      int32_t ne[2] = {1, 1};
+      int32_t ne[4] = {1, 1, 1, 1};
       for (int i = 0; i < n_dims; ++i) {
         fin.read(reinterpret_cast<char *>(&ne[i]), sizeof(ne[i]));
         nelements *= ne[i];

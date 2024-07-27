@@ -10,13 +10,14 @@ git clone --recursive https://github.com/balisujohn/tortoise.cpp.git
 # Compiling
 For now, CUDA and CPU only. To compile:
 
-## Compile for CPU
+## Compile for CPU (works on Linux x86 and Mac ARM)
 ````
 mkdir build
 cd build
 cmake .. 
 make
 ````
+This is tested with mac os arm
 
 ## Compile for CUDA
 ````
@@ -26,6 +27,14 @@ cmake .. -DGGML_CUBLAS=ON
 make
 ````
 This is tested with Ubuntu 22.04 and cuda 12.0 and a 1070ti
+
+## Compile for Mac OS with metal (work in-progress)
+````
+mkdir build
+cd build
+cmake .. -DGGML_METAL=ON
+make
+````
 
 # Running
 
