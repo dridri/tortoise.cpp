@@ -2,7 +2,7 @@
 #include "ggml/include/ggml-backend.h"
 #include "ggml/include/ggml.h"
 
-#ifdef GGML_USE_CUBLAS
+#ifdef GGML_USE_CUDA
 #include "ggml-cuda.h"
 #endif
 
@@ -612,7 +612,7 @@ bool autoregressive_model_load(const std::string &fname,
   }
 
   // initialize the backend
-#ifdef GGML_USE_CUBLAS
+#ifdef GGML_USE_CUDA
   fprintf(stderr, "%s: using CUDA backend\n", __func__);
   model.backend = ggml_backend_cuda_init(0);
   if (!model.backend) {
@@ -1074,7 +1074,7 @@ bool diffusion_model_load(const std::string &fname, diffusion_model &model) {
   }
 
   // initialize the backend
-#ifdef GGML_USE_CUBLAS
+#ifdef GGML_USE_CUDA
   fprintf(stderr, "%s: using CUDA backend\n", __func__);
   model.backend = ggml_backend_cuda_init(0);
   if (!model.backend) {
@@ -1609,7 +1609,7 @@ bool vocoder_model_load(const std::string &fname, vocoder_model &model) {
   }
 
   // initialize the backend
-#ifdef GGML_USE_CUBLAS
+#ifdef GGML_USE_CUDA
   fprintf(stderr, "%s: using CUDA backend\n", __func__);
   model.backend = ggml_backend_cuda_init(0);
   if (!model.backend) {
